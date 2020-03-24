@@ -2,12 +2,12 @@
   template:
     src: debconf-set-selections.j2
     dest: /tmp/debconf-set-selections.conf
-  when: packages_accept
+  when: packages_accept|bool
   register: selections_status
 
 - name: apt | run debconf-set-selections
   command: /usr/bin/debconf-set-selections /tmp/debconf-set-selections.conf
-  when: selections_status|changed
+  when: selections_status|bool
 
 - name: apt | add/remove package signing keys
   apt_key:
@@ -30,12 +30,12 @@
 
 - name: apt | remove packages
   apt:
-    name: "{{ item }}"
+    name: "{{ packages_remove }}"
     state: absent
-  with_items: '{{ packages_remove }}'
+  when: packages_remove|length
 
 - name: apt | add packages
   apt:
-    name: "{{ item }}"
+    name: "{{ packages_add }}"
     state: present
-  with_items: '{{ packages_add }}'
+  when: packages_remove|length

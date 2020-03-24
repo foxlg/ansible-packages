@@ -10,12 +10,13 @@
 
 - name: yum | remove packages
   yum:
-    name: "{{ itme }}"
+    name: "{{ packages_remove }}"
     state: absent
-  with_items: '{{ packages_remove }}'
+  when: packages_remove|length
+
 
 - name: yum | add packages
   yum:
-    name: "{{ item }}"
+    name: "{{ packages_add }}"
     state: present
-  with_items: '{{ packages_add }}'
+  when: packages_add|length
