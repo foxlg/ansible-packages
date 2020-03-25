@@ -38,4 +38,4 @@
   apt:
     name: "{{ packages_add }}"
     state: present
-  when: packages_remove|length
+  when: packages_add|length
